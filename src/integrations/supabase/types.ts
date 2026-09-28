@@ -14,60 +14,7 @@ export type Database = {
   }
   public: {
     Tables: {
-      bookings: {
-        Row: {
-          cancel_url: string | null
-          created_at: string
-          end_time: string | null
-          event_type: string
-          event_uri: string | null
-          id: string
-          invitee_email: string | null
-          invitee_name: string | null
-          invitee_uri: string | null
-          questions_answers: Json | null
-          raw_payload: Json
-          reschedule_url: string | null
-          start_time: string | null
-          status: string | null
-          timezone: string | null
-        }
-        Insert: {
-          cancel_url?: string | null
-          created_at?: string
-          end_time?: string | null
-          event_type: string
-          event_uri?: string | null
-          id?: string
-          invitee_email?: string | null
-          invitee_name?: string | null
-          invitee_uri?: string | null
-          questions_answers?: Json | null
-          raw_payload: Json
-          reschedule_url?: string | null
-          start_time?: string | null
-          status?: string | null
-          timezone?: string | null
-        }
-        Update: {
-          cancel_url?: string | null
-          created_at?: string
-          end_time?: string | null
-          event_type?: string
-          event_uri?: string | null
-          id?: string
-          invitee_email?: string | null
-          invitee_name?: string | null
-          invitee_uri?: string | null
-          questions_answers?: Json | null
-          raw_payload?: Json
-          reschedule_url?: string | null
-          start_time?: string | null
-          status?: string | null
-          timezone?: string | null
-        }
-        Relationships: []
-      }
+      [_ in never]: never
     }
     Views: {
       [_ in never]: never
