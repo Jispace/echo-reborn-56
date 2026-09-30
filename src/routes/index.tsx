@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MotionConfig } from "motion/react";
 
 import { Preloader } from "@/components/canport/Preloader";
@@ -46,6 +46,7 @@ export const Route = createFileRoute("/")({
 
 function Home() {
   const [showPreloader, setShowPreloader] = useState(true);
+  const [isContentReady, setIsContentReady] = useState(false);
   const [replayKey, setReplayKey] = useState(0);
   const [isBookingOpen, setIsBookingOpen] = useState(false);
   const [isScheduleOpen, setIsScheduleOpen] = useState(false);
@@ -53,8 +54,35 @@ function Home() {
 
   const handleReplayLoader = () => {
     setShowPreloader(true);
+    setIsContentReady(false);
     setReplayKey((prev) => prev + 1);
   };
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const waitForPageLoad = new Promise<void>((resolve) => {
+      if (document.readyState === "complete") {
+        resolve();
+        return;
+      }
+      window.addEventListener("load", () => resolve(), { once: true });
+    });
+
+    const waitForFonts = document.fonts?.ready ?? Promise.resolve();
+
+    Promise.all([waitForPageLoad, waitForFonts]).then(() => {
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          if (!cancelled) setIsContentReady(true);
+        });
+      });
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [replayKey]);
 
   const handleOpenBooking = (plan?: string) => {
     if (plan) setSelectedPlan(plan);
@@ -64,27 +92,38 @@ function Home() {
   return (
     <MotionConfig reducedMotion="user" transition={{ duration: DURATION.base, ease: EASE_OUT }}>
       <div className="min-h-screen bg-[#FDFBF7] text-[#2D241E] font-sans selection:bg-[#E0A97E]/30 selection:text-[#2D241E] flex flex-col">
-        {showPreloader && (
-          <Preloader key={replayKey} onComplete={() => setShowPreloader(false)} />
-        )}
-
         <Navbar
           onOpenBooking={handleOpenBooking}
           onOpenSchedule={() => setIsScheduleOpen(true)}
         />
 
-        <main className="flex-1">
-          <Hero
-            onOpenBooking={handleOpenBooking}
-            onOpenSchedule={() => setIsScheduleOpen(true)}
-          />
-          <AboutSection />
-          <BentoGrid onOpenBooking={handleOpenBooking} />
-          <ToolsMinimalGrid />
-          <ProjectsSection onOpenBooking={handleOpenBooking} />
-          <BeforeAfterSection />
-          <ProcessSection onOpenBooking={handleOpenBooking} />
-          <ContactSection onOpenBooking={handleOpenBooking} />
+        <main className="relative flex-1">
+          {showPreloader && (
+            <Preloader
+              key={replayKey}
+              isReady={isContentReady}
+              onComplete={() => setShowPreloader(false)}
+            />
+          )}
+
+          <div
+            className={`transition-opacity duration-500 motion-reduce:transition-none ${
+              isContentReady ? "opacity-100" : "pointer-events-none opacity-0"
+            }`}
+            aria-hidden={!isContentReady}
+          >
+            <Hero
+              onOpenBooking={handleOpenBooking}
+              onOpenSchedule={() => setIsScheduleOpen(true)}
+            />
+            <AboutSection />
+            <BentoGrid onOpenBooking={handleOpenBooking} />
+            <ToolsMinimalGrid />
+            <ProjectsSection onOpenBooking={handleOpenBooking} />
+            <BeforeAfterSection />
+            <ProcessSection onOpenBooking={handleOpenBooking} />
+            <ContactSection onOpenBooking={handleOpenBooking} />
+          </div>
         </main>
 
         <Footer onReplayLoader={handleReplayLoader} />

@@ -3,23 +3,28 @@ import { motion } from 'motion/react';
 import { portfolioProfile } from '../../data/portfolioData';
 
 interface PreloaderProps {
+  isReady: boolean;
   onComplete: () => void;
 }
 
-export const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
+export const Preloader: React.FC<PreloaderProps> = ({ isReady, onComplete }) => {
   return (
     <motion.div
       initial={{ opacity: 1 }}
-      animate={{ opacity: 0 }}
-      transition={{ delay: 0.65, duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-      onAnimationComplete={onComplete}
-      className="fixed inset-0 z-50 flex items-center justify-center bg-[#FDFBF7] pointer-events-none"
+      animate={{ opacity: isReady ? 0 : 1 }}
+      transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+      onAnimationComplete={() => {
+        if (isReady) onComplete();
+      }}
+      className="absolute inset-0 z-40 flex min-h-[calc(100dvh-4rem)] items-start justify-center bg-[#FDFBF7] px-4 pt-36 sm:pt-44"
+      aria-label="Chargement du contenu"
+      role="status"
     >
       <motion.div
         initial={{ opacity: 0, scale: 0.96, y: 6 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-        className="relative px-4 text-center will-change-transform motion-reduce:transform-none"
+        className="relative w-full max-w-xl text-center will-change-transform motion-reduce:transform-none"
       >
         <motion.div
           initial={{ scale: 0.88, opacity: 0 }}
@@ -52,6 +57,13 @@ export const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
         >
           {portfolioProfile.subtitle}
         </motion.p>
+
+        <div className="mx-auto mt-8 grid max-w-md grid-cols-3 gap-3" aria-hidden="true">
+          <span className="h-16 animate-pulse rounded-lg bg-[#EFE8DC]" />
+          <span className="h-16 animate-pulse rounded-lg bg-[#F4EDE2] [animation-delay:120ms]" />
+          <span className="h-16 animate-pulse rounded-lg bg-[#EFE8DC] [animation-delay:240ms]" />
+        </div>
+        <span className="sr-only">Le contenu est en cours de préparation.</span>
       </motion.div>
     </motion.div>
   );

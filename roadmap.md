@@ -15,4 +15,5 @@
 - [x] Moderniser le carrousel des projets et les cartes Avant/Après sur mobile.
 - [x] Vérifier ces ajustements sur mobile, tablette, ordinateur et au clavier.
 - [x] Sortir les actions des images de projets sur mobile.
+- [x] Garder la navigation accessible pendant le chargement et afficher un état fluide uniquement sous celle-ci.
 - [ ] Vérifier les contrastes et états interactifs mobiles selon WCAG AA.
