@@ -165,16 +165,12 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({ onOpenBooking 
             <ChevronRight />
           </Button>
         </div>
-        <div className="mb-8 flex items-center justify-center sm:mb-10 sm:hidden">
-          <div className="inline-flex h-11 items-center gap-1 rounded-2xl border border-[#E4DBD0] bg-white/75 px-1 shadow-[0_8px_24px_rgba(68,52,38,0.06)] backdrop-blur-md">
-          <Button type="button" variant="ghost" size="icon" onClick={() => selectAdjacentProject(-1)} aria-label="Projet précédent" className="h-9 w-9 shrink-0 rounded-xl text-[#4A3F35] hover:bg-[#F3EDE4] focus-visible:ring-2 focus-visible:ring-[#7A583E]">
-            <ChevronLeft className="h-4 w-4 stroke-[1.5]" />
-          </Button>
-          <p className="px-2 text-center text-[10px] font-semibold uppercase tracking-[0.08em] text-[#5C4D3E]">Glisser pour voir plus</p>
-          <Button type="button" variant="ghost" size="icon" onClick={() => selectAdjacentProject(1)} aria-label="Projet suivant" className="h-9 w-9 shrink-0 rounded-xl text-[#4A3F35] hover:bg-[#F3EDE4] focus-visible:ring-2 focus-visible:ring-[#7A583E]">
-            <ChevronRight className="h-4 w-4 stroke-[1.5]" />
-          </Button>
-          </div>
+        <div className="-mt-1 mb-7 flex items-center justify-center sm:mb-10 sm:hidden">
+          <p className="flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.1em] text-[#7A695B]">
+            <span className="inline-block animate-[drag-arrow-left_1.6s_ease-in-out_infinite]">←</span>
+            <span>Glisser pour voir plus</span>
+            <span className="inline-block animate-[drag-arrow-right_1.6s_ease-in-out_infinite]">→</span>
+          </p>
         </div>
         <div className="hidden sm:block sm:mb-10" />
 

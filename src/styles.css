@@ -157,6 +157,16 @@
   }
 }
 
+@keyframes drag-arrow-left {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(-5px); }
+}
+
+@keyframes drag-arrow-right {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(5px); }
+}
+
 @media (max-width: 639px) {
   section h2 {
     overflow-wrap: anywhere;
