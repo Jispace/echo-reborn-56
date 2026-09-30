@@ -170,12 +170,16 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({ onOpenBooking 
             <ChevronLeft />
           </Button>
           <div ref={selectorRef} className="-mx-4 flex flex-1 items-center justify-start overflow-x-auto px-4 pb-4 gap-2.5 sm:mx-0 sm:snap-x snap-mandatory sm:justify-center sm:px-0 sm:gap-3 scrollbar-none">
-          {projectsData.map((project) => {
+          {[0, 1, 2].flatMap((copy) =>
+          projectsData.map((project) => {
             const isSelected = project.id === activeProjectId;
             return (
               <button
-                key={project.id}
+                key={`${project.id}-${copy}`}
                 data-project-id={project.id}
+                data-copy={copy}
+                aria-hidden={copy !== 1}
+                tabIndex={copy === 1 ? 0 : -1}
                 type="button"
                 onClick={() => setActiveProjectId(project.id)}
                 className={`flex items-center gap-2 px-4 sm:snap-center sm:px-5 py-3 rounded-2xl text-xs sm:text-sm font-semibold transition-all whitespace-nowrap cursor-pointer shrink-0 border ${
