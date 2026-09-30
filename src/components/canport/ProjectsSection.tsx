@@ -165,7 +165,29 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({ onOpenBooking 
             <ChevronRight />
           </Button>
         </div>
-        <div className="-mt-1 mb-7 flex items-center justify-center sm:mb-10 sm:hidden">
+        <div
+          className="-mt-1 mb-7 flex items-center justify-center sm:mb-10 sm:hidden cursor-grab active:cursor-grabbing select-none touch-pan-y"
+          onPointerDown={(e) => {
+            const selector = selectorRef.current;
+            if (!selector) return;
+            e.currentTarget.setPointerCapture(e.pointerId);
+            const startX = e.clientX;
+            const startScroll = selector.scrollLeft;
+            const onMove = (ev: PointerEvent) => {
+              selector.scrollLeft = startScroll - (ev.clientX - startX);
+            };
+            const onEnd = () => {
+              window.removeEventListener('pointermove', onMove);
+              window.removeEventListener('pointerup', onEnd);
+              window.removeEventListener('pointercancel', onEnd);
+            };
+            window.addEventListener('pointermove', onMove);
+            window.addEventListener('pointerup', onEnd);
+            window.addEventListener('pointercancel', onEnd);
+          }}
+          role="presentation"
+          aria-label="Glisser pour faire défiler les projets"
+        >
           <p className="flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.1em] text-[#7A695B]">
             <span className="inline-block animate-[drag-arrow-left_1.6s_ease-in-out_infinite]">←</span>
             <span>Glisser pour voir plus</span>
