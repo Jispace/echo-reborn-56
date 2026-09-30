@@ -65,10 +65,43 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({ onOpenBooking 
     };
   }, []);
 
+  // Boucle infinie : la liste est triplée, on démarre au centre et on
+  // recentre silencieusement quand on approche d'une extrémité.
+  useEffect(() => {
+    const selector = selectorRef.current;
+    if (!selector) return;
+
+    const copyWidth = () => selector.scrollWidth / 3;
+
+    const recenter = () => {
+      const w = copyWidth();
+      if (w <= 0) return;
+      if (selector.scrollLeft < w * 0.5) {
+        selector.scrollLeft += w;
+      } else if (selector.scrollLeft > w * 1.5) {
+        selector.scrollLeft -= w;
+      }
+    };
+
+    // Position initiale au milieu de la copie centrale
+    selector.scrollLeft = copyWidth();
+
+    let raf = 0;
+    const onScroll = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(recenter);
+    };
+    selector.addEventListener('scroll', onScroll, { passive: true });
+    return () => {
+      selector.removeEventListener('scroll', onScroll);
+      cancelAnimationFrame(raf);
+    };
+  }, []);
+
   useEffect(() => {
     const selector = selectorRef.current;
     if (!selector || !window.matchMedia('(max-width: 639px)').matches) return;
-    const selectedProject = selector.querySelector<HTMLElement>(`[data-project-id="${activeProjectId}"]`);
+    const selectedProject = selector.querySelector<HTMLElement>(`[data-project-id="${activeProjectId}"][data-copy="1"]`);
     if (!selectedProject) return;
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const selectedBounds = selectedProject.getBoundingClientRect();
