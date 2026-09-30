@@ -8,3 +8,5 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+- Le chargement initial reste limité au contenu principal et attend la page et les polices ; la navigation ne doit jamais être recouverte, afin de rester immédiatement accessible.
